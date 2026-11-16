@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "DigDeep",
+  "version": "1.0.0",
+  "description": "Highlight any text and get an accurate fact about it, from basics to deep cuts.",
+  "icons": { "128": "icon.png" },
+  "action": { "default_icon": "icon.png", "default_title": "DigDeep: highlight any text, then click Dig" },
+  "permissions": ["contextMenus", "storage"],
+  "host_permissions": ["https://en.wikipedia.org/*", "https://api.duckduckgo.com/*", "http://localhost:8000/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "commands": {
+    "dig-selection": {
+      "suggested_key": { "default": "Alt+D" },
+      "description": "Dig the selected text"
+    }
+  }
+}
