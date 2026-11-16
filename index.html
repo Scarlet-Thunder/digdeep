@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DigDeep · Live demo</title>
+<meta name="description" content="Highlight any text and get an accurate fact about it. A Chrome extension built at MadHacks.">
+<link rel="icon" href="extension/icon.png">
+<style>
+  :root {
+    --bg: #f5f5f7; --card: #ffffff; --ink: #1d1d1f; --sub: #6e6e73; --rule: #e3e3e8; --accent: #0071e3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #000000; --card: #1c1c1e; --ink: #f5f5f7; --sub: #a1a1a6; --rule: #2c2c2e; --accent: #2997ff; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body { font: 17px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 16px; }
+
+  header { padding: 72px 0 40px; text-align: center; }
+  header img { width: 64px; height: 64px; }
+  h1 { font-size: clamp(40px, 7vw, 64px); line-height: 1.05; letter-spacing: -.035em; margin: 12px 0 10px; }
+  .tag { font-size: clamp(19px, 2.6vw, 23px); color: var(--sub); margin: 0 auto; max-width: 620px; }
+  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 26px; }
+  .btn { display: inline-block; padding: 11px 22px; border-radius: 999px; font-weight: 600; font-size: 15px; text-decoration: none; }
+  .btn.primary { background: var(--accent); color: #fff; }
+  .btn.ghost { color: var(--accent); background: rgba(0,113,227,.1); }
+
+  .try { margin: 8px 0 18px; text-align: center; font-weight: 600; color: var(--sub); font-size: 15px; }
+  .chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 26px; }
+  .chip { border: 0; border-radius: 999px; padding: 9px 16px; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+          background: var(--card); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.08), inset 0 0 0 1px var(--rule); }
+
+  article { background: var(--card); border-radius: 28px; padding: clamp(24px, 5vw, 48px); box-shadow: 0 2px 20px rgba(0,0,0,.05); }
+  .hero { height: 220px; border-radius: 18px; margin-bottom: 26px;
+          background:
+            radial-gradient(circle at 72% 55%, #f0a06a 0, #d0602c 15%, #8e2f12 26%, rgba(60,20,10,0) 27.5%),
+            radial-gradient(circle at 18% 30%, rgba(255,255,255,.9) 0 1px, transparent 2px),
+            radial-gradient(circle at 42% 72%, rgba(255,255,255,.7) 0 1px, transparent 2px),
+            radial-gradient(circle at 88% 18%, rgba(255,255,255,.8) 0 1px, transparent 2px),
+            linear-gradient(120deg, #120c1f, #2a1436 45%, #5a1f2a); }
+  .kicker { font-size: 12px; font-weight: 700; letter-spacing: .12em; color: #c2410c; }
+  h2 { font-size: 30px; line-height: 1.2; letter-spacing: -.02em; margin: 6px 0 16px; }
+  article p { font-family: Georgia, "Times New Roman", serif; font-size: 19px; line-height: 1.7; margin: 0 0 18px; }
+  .hint { font-size: 14px; color: var(--sub); text-align: center; margin: 18px 0 0; }
+
+  section.how { padding: 64px 0 24px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .box { background: var(--card); border-radius: 22px; padding: 24px; }
+  .box b { display: block; font-size: 19px; margin-bottom: 6px; letter-spacing: -.01em; }
+  .box span { color: var(--sub); font-size: 15px; }
+  h3 { font-size: 28px; letter-spacing: -.02em; text-align: center; margin: 0 0 22px; }
+  footer { text-align: center; color: var(--sub); font-size: 14px; padding: 40px 0 64px; }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<header class="wrap">
+  <img src="extension/icon.png" alt="DigDeep logo">
+  <h1>DigDeep</h1>
+  <p class="tag">Highlight any text on the web and get an accurate, interesting fact about it, without leaving the page.</p>
+  <div class="cta">
+    <a class="btn primary" href="#demo">Try it below</a>
+    <a class="btn ghost" id="repo-link" href="#">View on GitHub</a>
+  </div>
+</header>
+
+<main class="wrap" id="demo">
+  <p class="try">Highlight any word in the article, then click <b>Dig</b>. Or tap one:</p>
+  <div class="chips">
+    <button class="chip" data-term="Mars">Mars</button>
+    <button class="chip" data-term="octopus">Octopus</button>
+    <button class="chip" data-term="Eiffel Tower">Eiffel Tower</button>
+    <button class="chip" data-term="black hole">Black hole</button>
+  </div>
+
+  <article>
+    <div class="hero" role="img" aria-label="Illustration of Mars in space"></div>
+    <div class="kicker">SPACE</div>
+    <h2>Why the Red Planet still surprises scientists</h2>
+    <p>Decades of orbiters and rovers have mapped Mars in remarkable detail, yet every new mission turns up something unexpected, from ancient river deltas to ice hiding just below the dusty surface.</p>
+    <p>Its two tiny moons, Phobos and Deimos, may be captured asteroids. Olympus Mons, the tallest volcano in the Solar System, rises nearly three times higher than Mount Everest, and the canyon system Valles Marineris would stretch across the entire United States.</p>
+    <p>Missions like Curiosity, Perseverance and the Ingenuity helicopter are searching for signs of ancient microbial life, while engineers plan how astronauts might one day live there.</p>
+    <p class="hint">Tip: drag the <b>Nicheness</b> slider in the card to go from general basics to deep-cut details.</p>
+  </article>
+
+  <section class="how">
+    <h3>How it works</h3>
+    <div class="grid">
+      <div class="box"><b>1. Highlight</b><span>Select any text on any website.</span></div>
+      <div class="box"><b>2. Dig</b><span>Click Dig, right-click, or press Alt+D.</span></div>
+      <div class="box"><b>3. Wikipedia</b><span>DigDeep pulls real facts from the best matching articles.</span></div>
+      <div class="box"><b>4. Decider</b><span>A Strands AI agent picks the fact that fits, and never makes one up.</span></div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  Built in 24 hours at MadHacks by a team of four freshmen.<br>
+  This page is a web demo of the Chrome extension. <a id="repo-link-2" href="#">Get the extension on GitHub</a>.
+</footer>
+
+<script>
+  // Point the GitHub links at this repo automatically (works once it's on GitHub Pages)
+  (function () {
+    const m = location.hostname.match(/^([^.]+)\.github\.io$/);
+    const repo = location.pathname.split("/").filter(Boolean)[0];
+    if (m && repo) {
+      const url = `https://github.com/${m[1]}/${repo}`;
+      document.getElementById("repo-link").href = url;
+      document.getElementById("repo-link-2").href = url;
+    }
+  })();
+
+  // Bridge: the extension's content.js talks to background.js through chrome.runtime.
+  // Here, background.js runs in a Web Worker and we pass messages to it.
+  const worker = new Worker("demo/worker.js");
+  const pending = new Map();
+  let nextId = 0;
+  worker.onmessage = (e) => {
+    const cb = pending.get(e.data.id);
+    pending.delete(e.data.id);
+    if (cb) cb(e.data.res);
+  };
+  const store = {};
+  try { Object.assign(store, JSON.parse(localStorage.getItem("digdeep") || "{}")); } catch (e) {}
+  window.chrome = {
+    storage: { local: {
+      get(keys, cb) { cb({ ...store }); },
+      set(obj) { Object.assign(store, obj); try { localStorage.setItem("digdeep", JSON.stringify(store)); } catch (e) {} },
+    } },
+    runtime: {
+      onMessage: { addListener() {} },
+      sendMessage(msg, cb) { const id = ++nextId; pending.set(id, cb); worker.postMessage({ id, msg }); },
+    },
+  };
+</script>
+<script src="extension/content.js"></script>
+<script>
+  // Quick-try chips (handy on phones, where highlighting is fiddly)
+  document.querySelectorAll(".chip").forEach((chip) => {
+    chip.addEventListener("mousedown", (e) => e.stopPropagation());
+    chip.addEventListener("click", () => {
+      dig(toAnchor(chip.getBoundingClientRect()), chip.dataset.term, "", false);
+    });
+  });
+</script>
+</body>
+</html>
